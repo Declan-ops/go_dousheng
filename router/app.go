@@ -1,6 +1,9 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"go_dousheng/controller"
+)
 
 func InitRouter(r *gin.Engine) {
 
@@ -8,7 +11,8 @@ func InitRouter(r *gin.Engine) {
 	r.Static("/static", "./public")
 	apiRouter := r.Group("/douyin")
 
-	apiRouter.GET("/user/")
+	apiRouter.GET("/user/", controller.GetUserInfo)
+	apiRouter.GET("user/login/", controller.UserLogin)
 	// basic apis
 	/*	apiRouter.GET("/feed/", controller.Feed)
 		apiRouter.GET("/user/", controller.UserInfo)

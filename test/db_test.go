@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"go_dousheng/mapper"
 	"go_dousheng/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,6 +16,7 @@ func TestGormTest(t *testing.T) {
 		t.Fatal("连接失败", err)
 	}
 	// 查询数据
+
 	// 插入数据
 	u1 := model.Video{
 		1,
@@ -29,6 +31,7 @@ func TestGormTest(t *testing.T) {
 		return
 	}
 	data := make([]*model.Video, 0)
+
 	err = db.Find(&data).Error
 	if err != nil {
 		t.Fatal(err)
@@ -39,4 +42,8 @@ func TestGormTest(t *testing.T) {
 		fmt.Println("1111")
 		fmt.Printf("%v\n", v)
 	}
+}
+
+func TestInitMap(t *testing.T) {
+	mapper.IntitUserMap()
 }
