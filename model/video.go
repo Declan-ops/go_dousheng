@@ -1,5 +1,7 @@
 package model
 
+import "mime/multipart"
+
 type Video struct {
 	Id         int64
 	AuthorId   int64
@@ -21,4 +23,10 @@ type VideoUserFavorite struct {
 
 func (VideoUserFavorite) TableName() string {
 	return "video_user_favorite_table"
+}
+
+type Videos struct {
+	Data  *multipart.Form
+	Title string
+	Token string
 }

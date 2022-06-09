@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestGormTest(t *testing.T) {
@@ -103,4 +104,21 @@ func Test4(t *testing.T) {
 
 	db := mapper.InitDB()
 	db.AutoMigrate(&model.VideoUserFavorite{})
+}
+
+func Test5(t *testing.T) {
+	// 增加数据
+	timeUnix := time.Now().Unix() //获取当前时间戳
+	fmt.Println(timeUnix)
+	video_save := &model.Video{
+
+		AuthorId:   1,
+		PlayUrl:    "https://jxau7124.oss-cn-shenzhen.aliyuncs.com/%E5%BC%A0%E4%B8%89/%E5%96%9C%E6%AC%A2%E4%BD%A0%E5%91%80%EF%BC%81%EF%BC%81%EF%BC%81VIDEO_20220609_150310888.mp4",
+		CoverUrl:   "https://jxau7124.oss-cn-shenzhen.aliyuncs.com/%E5%BC%A0%E4%B8%89/%E5%96%9C%E6%AC%A2%E4%BD%A0%E5%91%80%EF%BC%81%EF%BC%81%EF%BC%81VIDEO_20220609_150310888.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast",
+		Title:      "桌面分享",
+		CreateTime: timeUnix,
+	}
+	db := mapper.InitDB()
+	db.Debug().Create(video_save)
+
 }
