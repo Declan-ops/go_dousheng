@@ -16,3 +16,13 @@ type User struct {
 func (User) TableName() string {
 	return "user_table"
 }
+
+type UserAttention struct {
+	Id      int64 `gorm:"id"`
+	UserId  int64 `gorm:"userId"`
+	OtherId int64 `gorm:"otherId"`
+}
+
+func (UserAttention) TableName() string {
+	return "user_attention_table"
+}

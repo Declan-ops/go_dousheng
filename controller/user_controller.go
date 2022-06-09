@@ -2,13 +2,37 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"go_dousheng/model"
 	"go_dousheng/service"
 	"net/http"
 )
 
 func GetUserInfo(c *gin.Context) {
-
 	// 获得用户信息
+
+	user_id := c.Query("user_id")
+	token := c.Query("token")
+	userVO, err := service.QueryUserInfo(user_id, token)
+	if err != nil {
+		c.JSON(http.StatusOK, model.UserVO{
+			Response: model.Response{
+				StatusCode: 406,
+				StatusMsg:  err.Error(),
+			},
+		})
+	}
+	c.JSON(http.StatusOK, model.UserVO{
+		Response: model.Response{
+			StatusCode: 0,
+			StatusMsg:  "获取用户信息成功！",
+		},
+		Id:            userVO.Id,
+		Name:          userVO.Name,
+		FollowCount:   userVO.FollowCount,
+		FollowerCount: userVO.FollowerCount,
+		IsFollow:      userVO.IsFollow,
+	})
+
 }
 
 func UserLogin(c *gin.Context) {
@@ -21,10 +45,11 @@ func UserLogin(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status_code": 1,
-			"status_msg":  err,
+			"status_msg":  "登陆成功！",
 			"user_id":     nil,
 			"token":       nil,
 		})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status_code": 0,

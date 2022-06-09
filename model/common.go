@@ -23,7 +23,7 @@ type UserVO struct {
 	Response      Response
 	Id            int64  `json:"id,omitempty"`
 	Name          string `json:"name,omitempty"`
-	FollowCount   int64  `json:"follow_count,omitempty"`
-	FollowerCount int64  `json:"follower_count,omitempty"`
+	FollowCount   int64  `json:"follow_count,omitempty"`   // 关注总数
+	FollowerCount int64  `json:"follower_count,omitempty"` // 粉丝总数
 	IsFollow      bool   `json:"is_follow,omitempty"`
 }

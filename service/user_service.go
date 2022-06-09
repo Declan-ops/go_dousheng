@@ -7,12 +7,13 @@ import (
 	"go_dousheng/mapper"
 	"go_dousheng/model"
 	"go_dousheng/util"
+	"strconv"
 	"strings"
-	"time"
 )
 
 func QueryUser(username, password string) (*model.User, error) {
 
+	mapper.InitMap()
 	user := mapper.NewUserDaoInstance().QueryPostsByParentId(username)
 
 	if user == nil {
@@ -28,23 +29,38 @@ func QueryUser(username, password string) (*model.User, error) {
 
 	if password == user.Password {
 
-		// 检查token是否过期，过期就更新
-		finToken, erl := util.GetTokenInfo(user.Token)
-		if erl != nil {
-			return nil, erl
-		}
-		//校验下token是否过期
-		succ := finToken.VerifyExpiresAt(time.Now().Unix(), true)
-		if !succ {
-
-			// 更新token
+		a := false
+		// 如果没有token就下发token
+		token := user.Token
+		if len(token) == 0 {
+			// 下发token
+			a = true
 			user.Token = util.GetToken(*user)
+		}
 
-			// 保存进数据库
+		// 检查token是否过期，过期就更新
+		_, err := util.GetTokenInfo(user.Token)
+		if err != nil {
+
+			if err.Error() == "token失效!" {
+				// token过期，更新token
+				a = true
+				user.Token = util.GetToken(*user)
+			} else {
+				return nil, err
+			}
+		}
+
+		if a {
+			// token更新，保存进数据库
 			go func() {
 				db := mapper.InitDB()
 				db.Model(&user).Update("token", user.Token)
 			}()
+
+			// 缓存也得更新
+			mapper.NewUserDaoInstance().UpdateMapUser(user)
+
 		}
 
 		return user, nil
@@ -53,4 +69,23 @@ func QueryUser(username, password string) (*model.User, error) {
 	}
 
 	return nil, nil
+}
+
+func QueryUserInfo(user_id, token string) (*model.UserVO, error) {
+
+	userId, err := strconv.ParseInt(user_id, 10, 64)
+	if err != nil {
+		return nil, errors.New("程序异常")
+	}
+
+	// 进行token认证
+	user, err := util.CheckToken(token)
+	if err != nil || user.Id != userId {
+		return nil, errors.New("token认证失败！")
+	}
+
+	// 根据条件查找用户的粉丝数以及关注数
+	userVO := mapper.NewUserDaoInstance().QueryUserAttentionAndFollow(user)
+	return userVO, nil
+
 }

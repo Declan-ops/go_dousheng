@@ -8,6 +8,8 @@ import (
 func main() {
 
 	r := gin.Default()
+	r.MaxMultipartMemory = 8 << 20 // 8 MiB
+	//mapper.InitMap()
 	router.InitRouter(r)
 	r.Run()
 

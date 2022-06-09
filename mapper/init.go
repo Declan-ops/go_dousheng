@@ -16,6 +16,7 @@ func InitDB() *gorm.DB {
 }
 
 func InitMap() error {
+
 	if error := IntitUserMap(); error != nil {
 		return error
 	}

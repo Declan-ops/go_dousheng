@@ -21,14 +21,15 @@ func IntitUserMap() error {
 		fmt.Println("查询失败，错误：", err)
 		return err
 	}
-	userInitMap := make(map[string]*model.User)
+
+	userTempMap := make(map[string]*model.User)
 	// 遍历数据，放入map中
 	for _, v := range data {
 
-		userInitMap[v.Name] = v
+		userTempMap[v.Name] = v
 		fmt.Println("用户：", userInitMap[v.Token])
 	}
-
+	userInitMap = userTempMap
 	return nil
 
 }
