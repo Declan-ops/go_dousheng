@@ -53,7 +53,7 @@ func UploadVideo(video *model.Videos) error {
 			Title:      video.title,
 			CreateTime: timeUnix,
 		}
-		mapper.SaveVideo(video_save)
+		mapper.NewVideoDaoInstance().SaveVideo(video_save)
 
 	}
 	return nil
@@ -100,4 +100,36 @@ func UploadAliyunOss(file *multipart.FileHeader, video *VideoFile) string {
 	fmt.Println("file upload success")
 	real_path := "https://jxau7124.oss-cn-shenzhen.aliyuncs.com/" + path
 	return real_path
+}
+
+func QueryUserVideoList(user *model.User) ([]*model.VideoVO, error) {
+
+	// 解析token，获取当前用户
+	db_user, err2 := util.CheckToken(user.Token)
+	if err2 != nil && db_user != nil && db_user.Id == user.Id {
+
+		if user == nil {
+			return nil, errors.New("token认证失败！未查询到该用户")
+		} else {
+			return nil, errors.New(err2.Error())
+		}
+
+	}
+
+	// 查询数据库，获取发布视频列表
+	video_list, err := mapper.NewVideoDaoInstance().QueryUserVideo(db_user)
+	if err != nil {
+		return nil, err
+	}
+	return video_list, nil
+}
+
+func VideoFeed(latest_time, token string) ([]*model.VideoVO, error) {
+
+	// 查询数据库，获取所有发布视频列表
+	video_list, err := mapper.NewVideoDaoInstance().QueryAllVideos(latest_time)
+	if err != nil {
+		return nil, err
+	}
+	return video_list, nil
 }

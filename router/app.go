@@ -14,15 +14,11 @@ func InitRouter(r *gin.Engine) {
 	apiRouter.GET("/user/", controller.GetUserInfo)
 	apiRouter.POST("/user/login/", controller.UserLogin)
 	apiRouter.POST("/publish/action/", controller.UpLoadFile)
+	apiRouter.GET("/publish/list/", controller.PublishList)
+	apiRouter.GET("/feed/", controller.Feed)
+	apiRouter.POST("/user/register/", controller.Register)
 
-	// basic apis
-	/*	apiRouter.GET("/feed/", controller.Feed)
-
-		apiRouter.POST("/user/register/", controller.Register)
-		apiRouter.POST("/user/login/", controller.Login)
-
-		apiRouter.GET("/publish/list/", controller.PublishList)
-
+	/*
 		// extra apis - I
 		apiRouter.POST("/favorite/action/", controller.FavoriteAction)
 		apiRouter.GET("/favorite/list/", controller.FavoriteList)

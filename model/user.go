@@ -26,3 +26,9 @@ type UserAttention struct {
 func (UserAttention) TableName() string {
 	return "user_attention_table"
 }
+
+type UserPOJO struct {
+	Response Response
+	UserId   int64  `json:"user_id,omitempty"`
+	Token    string `json:"token,omitempty"`
+}

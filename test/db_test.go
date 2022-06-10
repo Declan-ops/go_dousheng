@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go_dousheng/mapper"
 	"go_dousheng/model"
+	"go_dousheng/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
@@ -121,4 +122,17 @@ func Test5(t *testing.T) {
 	db := mapper.InitDB()
 	db.Debug().Create(video_save)
 
+}
+func Test6(t *testing.T) {
+
+	password := util.MD5("123456")
+	user := &model.User{
+		Name:     "beixiaofeng",
+		Password: password,
+		Token:    "",
+	}
+	// 连接数据库
+	db := mapper.InitDB()
+	db.Create(user).Debug()
+	fmt.Println(user)
 }

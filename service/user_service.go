@@ -13,7 +13,6 @@ import (
 
 func QueryUser(username, password string) (*model.User, error) {
 
-	mapper.InitMap()
 	user := mapper.NewUserDaoInstance().QueryPostsByParentId(username)
 
 	if user == nil {
@@ -87,5 +86,22 @@ func QueryUserInfo(user_id, token string) (*model.UserVO, error) {
 	// 根据条件查找用户的粉丝数以及关注数
 	userVO := mapper.NewUserDaoInstance().QueryUserAttentionAndFollow(user)
 	return userVO, nil
+
+}
+
+func SaveUser(username, password string) (*model.User, error) {
+
+	password = util.MD5(password)
+	user := model.User{
+		Name:     username,
+		Password: password,
+	}
+	user.Token = util.GetToken(user)
+	err := mapper.NewUserDaoInstance().SaveUser(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 
 }

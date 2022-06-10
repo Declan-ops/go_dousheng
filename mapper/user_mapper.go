@@ -2,7 +2,6 @@ package mapper
 
 import (
 	"go_dousheng/model"
-
 	"sync"
 )
 
@@ -40,6 +39,13 @@ func (d *UserDao) QueryUserByName(username string, user *model.User) {
 
 }
 
+func (d *UserDao) QueryUserById(userId int64, user *model.User) {
+	// 连接数据库，查询所有用户信息，放入缓存中
+	db := InitDB()
+	db.Where("id = ?", userId).Debug().First(&user)
+
+}
+
 func (d *UserDao) QueryUserAttentionAndFollow(user *model.User) *model.UserVO {
 
 	// 连接数据库，查询所有用户信息，放入缓存中
@@ -55,4 +61,30 @@ func (d *UserDao) QueryUserAttentionAndFollow(user *model.User) *model.UserVO {
 	user_vo.Name = user.Name
 	return &user_vo
 
+}
+
+func (d *UserDao) QueryUserVOAttentionAndFollow(user *model.UserVO) {
+
+	// 连接数据库，查询所有用户信息，放入缓存中
+	db := InitDB()
+	var user_db model.User
+	NewUserDaoInstance().QueryUserById(user.Id, &user_db)
+	// 粉丝数
+	db.Model(&model.UserAttention{}).Where("user_id = ?", user.Id).Count(&user.FollowerCount)
+	// 关注数
+	db.Model(&model.UserAttention{}).Where("other_id = ?", user.Id).Count(&user.FollowCount)
+	// 组装
+	user.Id = user.Id
+	user.Name = user_db.Name
+
+}
+
+func (d *UserDao) SaveUser(user *model.User) error {
+
+	// 存入数据库，更新map
+	// 连接数据库
+	db := InitDB()
+	db.Create(user).Debug()
+	NewUserDaoInstance().UpdateMapUser(user)
+	return nil
 }

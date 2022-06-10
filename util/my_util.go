@@ -1,12 +1,14 @@
 package util
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"go_dousheng/mapper"
 	"go_dousheng/model"
+	"strings"
 	"time"
 )
 
@@ -106,4 +108,16 @@ func CheckToken(tokenStr string) (*model.User, error) {
 	}
 	return &user2, nil
 
+}
+
+func MD5(password string) string {
+
+	// 进行md5加密
+	newSig := md5.Sum([]byte(password)) //转成加密编码
+	// 将编码转换为字符串
+	newArr := fmt.Sprintf("%x", newSig)
+	//输出字符串字母都是小写，转换为大写
+	password = strings.ToTitle(newArr)
+
+	return password
 }
