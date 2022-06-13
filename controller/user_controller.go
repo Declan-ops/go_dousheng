@@ -54,7 +54,7 @@ func UserLogin(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status_code": 1,
-			"status_msg":  "登陆成功！",
+			"status_msg":  "登陆失败！账号或者密码错误",
 			"user_id":     nil,
 			"token":       nil,
 		})
