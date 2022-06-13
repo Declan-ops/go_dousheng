@@ -11,6 +11,13 @@
 
 
 
+## 成果展示
+
+#### 视频地址
+
+https://jxau7124.oss-cn-shenzhen.aliyuncs.com/%E5%B1%95%E7%A4%BA%E8%A7%86%E9%A2%91/202206131040.mp4
+
+
 ## 项目接口说明
 
 ### 视频模块
@@ -380,11 +387,4 @@ func UpLoadFile(c *gin.Context) {
 
 
 
-
-
-## 成果展示
-
-#### 视频地址
-
-https://jxau7124.oss-cn-shenzhen.aliyuncs.com/%E5%B1%95%E7%A4%BA%E8%A7%86%E9%A2%91/202206131040.mp4
 
