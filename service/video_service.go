@@ -63,8 +63,8 @@ func UploadVideo(video *model.Videos) error {
 func UploadAliyunOss(file *multipart.FileHeader, video *VideoFile) string {
 
 	Endpoint := "https://cn-shenzhen.oss.aliyuncs.com"  // 这里的是广州区，
-	AccessKeyID := "xxxxxx"           //
-	AccessKeySecret := "xxxxxxxx" //
+	AccessKeyID := "xxxxxx"           
+	AccessKeySecret := "xxxxxxxx" 
 
 	client, err := oss.New(Endpoint, AccessKeyID, AccessKeySecret)
 	if err != nil {
